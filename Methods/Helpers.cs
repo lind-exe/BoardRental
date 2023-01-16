@@ -110,8 +110,9 @@ namespace BoardRental.Methods
             }
             return outPut;
         }
-        public static int TryNumber(int number, int maxValue, int minValue)               //input security
+        public static int TryNumber(int maxValue, int minValue)               //input security
         {
+            int number = 0;
             bool correctInput = false;
             while (!correctInput)
             {
@@ -126,6 +127,22 @@ namespace BoardRental.Methods
                 }
             }
             return number;
+        }
+        internal static void WrongInput()
+        {
+            Console.Clear();
+            Console.SetCursorPosition(2, 2);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("WRONGINPUT");
+            Thread.Sleep(500);
+            Console.ResetColor();
+            Console.Clear();
+        }
+
+        internal static void BoardType(int type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

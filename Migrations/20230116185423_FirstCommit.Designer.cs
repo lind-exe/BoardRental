@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoardRental.Migrations
 {
     [DbContext(typeof(BoardRentalContext))]
-    [Migration("20230114180552_FirstC")]
-    partial class FirstC
+    [Migration("20230116185423_FirstCommit")]
+    partial class FirstCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,14 +106,14 @@ namespace BoardRental.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Motorized")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("Motorized")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Price")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Price")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");

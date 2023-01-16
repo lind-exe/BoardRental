@@ -9,6 +9,11 @@ namespace BoardRental.Methods
 {
     internal class View
     {
+        internal static void BrowseBoards(Customer c)
+        {
+            
+        }
+
         internal static void DisplayCustomer(Customer c)
         {
             Console.Clear();
