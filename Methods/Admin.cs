@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -73,10 +74,12 @@ namespace BoardRental.Methods
             using (var db = new BoardRentalContext())
             {
                 Console.WriteLine("ID\t\tName\t\tPrice\t\tMotorized\t\tBrand");
-                foreach (var board in db.Longboards)
+                foreach (var board in db.Longboards.ToList())
                 {
                     Console.WriteLine(board.Id + "\t\t" + board.Name + "\t\t" + board.Price + "\t\t" + board.Motorized + "\t\t\t" + board.Brand + "\t\t");
                 }
+                Console.WriteLine("Select id of the board you wish to edit: ");
+                // input id hej
             }
         }
 
