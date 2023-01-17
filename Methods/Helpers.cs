@@ -28,18 +28,28 @@ namespace BoardRental.Methods
                 }
                 else if (correctUsername == null && correctUser == null)
                 {
-                    Console.WriteLine("User does not exist, try again or register new user!", c);
+                    ReturnToLogIn("User does not exist, try again or register new user!", c);
                 }
                 else if (correctUsername != null && correctUser == null)
                 {
-                    Console.WriteLine("Wrong password", c);
+                    ReturnToLogIn("Wrong password, try again!", c);
                 }
-                else
-                {
-                    Console.WriteLine("Try again", c);
-                }
+                //else
+                //{
+                //    ReturnToLogIn("idk bro", c);
+                //}
                 return c;
             }
+        }
+        internal static void ReturnToLogIn(string message, Customer c)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey(true);
+            Console.ResetColor();
+            Console.Clear();
+            Menus.Show("LogIn", c);
         }
         public static Customer CreateUser(Customer c)
         {
@@ -110,7 +120,7 @@ namespace BoardRental.Methods
             }
             return outPut;
         }
-        public static int TryNumber(int maxValue, int minValue)               //input security
+        public static int TryNumber(int maxValue, int minValue)
         {
             int number = 0;
             bool correctInput = false;
@@ -119,7 +129,7 @@ namespace BoardRental.Methods
                 if (!int.TryParse(Console.ReadLine(), out number) || number > maxValue || number < minValue)
                 {
                     Console.Write("Wrong input, try again: ");
-                    //ClearLine();
+                    
                 }
                 else
                 {
@@ -142,7 +152,7 @@ namespace BoardRental.Methods
 
         internal static void BoardType(int type)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

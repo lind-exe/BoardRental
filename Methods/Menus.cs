@@ -36,13 +36,62 @@ namespace BoardRental.Methods
             Return = 0
         }
 
-        public static Customer Show(string value, Customer c)                   //fixa wrong input till meny val - funkar nästan
+        public static Customer Show(string value, Customer c)
         {
             bool logIn = true;
             bool goMain = true;
             bool booking = true;
             bool adminMenu = true;
 
+            if (value == "Main")
+            {
+                while (goMain)
+                {
+                    foreach (int i in Enum.GetValues(typeof(Main)))
+                    {
+                        Console.WriteLine($"{i}. {Enum.GetName(typeof(Main), i).Replace("_", " ")}");
+                    }
+
+                    int nr;
+                    Main menu = (Main)99; //Default
+                    if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr) || nr > Enum.GetNames(typeof(Main)).Length - 1)
+                    {
+                        menu = (Main)nr;
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        Helpers.WrongInput();
+                    }
+                    switch (menu)
+                    {
+                        case Main.Browse_Boards:
+                            View.BrowseBoards(c);
+                            Console.ReadKey();
+                            goMain = false;
+                            break;
+                        case Main.View_Bookings:
+                            Show("Bookings", c);
+                            goMain = false;
+                            break;
+                        case Main.Log_Out:
+                            c = null;
+                            goMain = false;
+                            Show("LogIn", c);
+                            break;
+                        case Main.Admin_Menu:
+                            if (c.UserName == "admin")
+                            {
+                                Show("Admin", c);
+                            }
+                            else
+                            {
+                                Helpers.WrongInput();
+                            }
+                            break;
+                    }
+                }
+            }
             if (value == "LogIn")
             {
                 while (logIn)
@@ -77,54 +126,6 @@ namespace BoardRental.Methods
                     }
                 }
                 Console.WriteLine("Succesfully logged in!");
-            }
-            if (value == "Main")
-            {
-                while (goMain)
-                {
-                    foreach (int i in Enum.GetValues(typeof(Main)))
-                    {
-                        Console.WriteLine($"{i}. {Enum.GetName(typeof(Main), i).Replace("_", " ")}");
-                    }
-
-                    int nr;
-                    Main menu = (Main)99; //Default
-                    if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr) || nr > Enum.GetNames(typeof(Main)).Length - 1)
-                    {
-                        menu = (Main)nr;
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Helpers.WrongInput();
-                    }
-                    switch (menu)
-                    {
-                        case Main.Browse_Boards:
-                            View.BrowseBoards(c);
-                            goMain = false;
-                            break;
-                        case Main.View_Bookings:
-                            Show("Bookings", c);
-                            goMain = false;
-                            break;
-                        case Main.Log_Out:
-                            c = null;
-                            goMain = false;
-                            Show("LogIn", c);
-                            break;
-                        case Main.Admin_Menu:
-                            if (c.UserName == "admin")
-                            {
-                                Show("Admin", c);
-                            }
-                            else
-                            {
-                                Helpers.WrongInput();
-                            }
-                            break;
-                    }
-                }
             }
             if (value == "Bookings")
             {

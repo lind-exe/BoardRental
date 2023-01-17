@@ -11,7 +11,15 @@ namespace BoardRental.Methods
     {
         internal static void BrowseBoards(Customer c)
         {
-            
+            using (var db = new BoardRentalContext())
+            {
+                var boardList = db.Longboards.ToList();
+                Console.WriteLine("Id\t\tName\t\tPrice\t\tMotorized\t\tBrand");
+                foreach (var b in boardList)
+                {
+                    Console.WriteLine(b.Id + "\t\t" + b.Name + "\t\t" + b.Price + "\t\t" + b.Motorized + "\t\t\t" + b.Brand + "\t\t");
+                }
+            }
         }
 
         internal static void DisplayCustomer(Customer c)
