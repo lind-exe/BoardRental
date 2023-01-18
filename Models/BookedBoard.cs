@@ -9,7 +9,8 @@ namespace BoardRental.Models
     public class BookedBoard
     {
         public int Id { get; set; }
-        public DateTime BookDate { get; set; }
+        public int? BookedDay { get; set; }
+        public int? BookedWeek { get; set; }
 
         public virtual Customer? Customer { get; set; }
         public virtual Longboard? Longboard { get; set; }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoardRental.Migrations
 {
     [DbContext(typeof(BoardRentalContext))]
-    [Migration("20230116185423_FirstCommit")]
-    partial class FirstCommit
+    [Migration("20230118204615_firstCommit")]
+    partial class firstCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,8 +32,11 @@ namespace BoardRental.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("BookDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("BookedDay")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookedWeek")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");

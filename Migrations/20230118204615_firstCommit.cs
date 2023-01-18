@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace BoardRental.Migrations
 {
-    public partial class FirstCommit : Migration
+    public partial class firstCommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,7 +51,8 @@ namespace BoardRental.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BookedDay = table.Column<int>(type: "int", nullable: false),
+                    BookedWeek = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
                     LongboardId = table.Column<int>(type: "int", nullable: true)
                 },
