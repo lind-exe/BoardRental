@@ -87,7 +87,7 @@ namespace BoardRental.Methods
                     i++;
                     Console.WriteLine(i + "\t\t" + board.Name + "\t\t" + board.Price + "\t\t" + board.Motorized + "\t\t\t" + board.Brand + "\t\t");
                 }
-                Console.WriteLine("Select id of the board you wish to edit: ");
+                Console.WriteLine("\nSelect id of the board you wish to edit: ");
                 int idInput = Helpers.TryNumber(boardList.ToList().Count, 1);
                 int selectedBoard = boardList[idInput - 1].Id;
                 if (boardList[selectedBoard - 1] != null)
@@ -99,7 +99,7 @@ namespace BoardRental.Methods
                 {
                     Console.WriteLine("There are no boards with corresponding id");
                 }
-
+                Console.Clear();
                 Console.WriteLine("What would you like to edit?\n1. Name\n2. Price\n3. Manual/ motorized\n4. Brand\n5. Delete board\n0. Return");
                 int answer = Helpers.TryNumber(5, 0);
                 switch (answer)
