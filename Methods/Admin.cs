@@ -212,8 +212,8 @@ namespace BoardRental.Methods
         }
         internal static void Queries()
         {
+            Console.WriteLine("1. Most popular board\n2. Total number of bookings\n3. Total revenue");
             int input = Helpers.TryNumber(3, 1);
-            Console.WriteLine("1. Most popular board\n2. Total number of bookings\n3.Total revenue");
             switch (input)
             {
                 case 1:

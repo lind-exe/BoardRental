@@ -18,12 +18,26 @@ namespace BoardRental.Methods
 
                 int i = 0;
 
-                Console.WriteLine("Id\tName\t\t\tPrice\t\t\tMotorized\t\tBrand");
-                foreach (var b in boardList)
+                int padValue1 = 15;
+                int padValue2 = 20;
+
+                Console.WriteLine("Id\t" + "Name".PadRight(30) + "Price".PadRight(padValue1) +
+                                  "Motorized".PadRight(padValue2) + "Brand".PadRight(padValue2) +
+                                  "Type".PadRight(padValue1));
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("=======================================================================================================");
+                Console.ResetColor();
+                foreach (var selectedBoard in boardList)
                 {
                     i++;
-                    Console.WriteLine(i + "\t" + b.Name + "\t\t\t" + b.Price + "\t\t\t" + b.Motorized + "\t\t\t" + b.Brand + "\t\t");
+                    Console.WriteLine(i + "\t" + selectedBoard.Name.PadRight(30) + selectedBoard.Price.ToString().PadRight(padValue1) +
+                                      selectedBoard.Motorized.ToString().PadRight(padValue2) + selectedBoard.Brand.ToString().PadRight(padValue2) +
+                                      selectedBoard.Type.ToString().PadRight(padValue1));
+
                 }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("=======================================================================================================");
+                Console.ResetColor();
 
                 Console.Write("\nEnter id of the board you wish to rent: ");
                 int answer = Helpers.TryNumber(boardList.Count(), 1);
@@ -41,35 +55,38 @@ namespace BoardRental.Methods
                 var selectedBoard = db.Longboards.Where(x => x.Id == boardId).FirstOrDefault();
 
 
-
                 int padValue1 = 15;
                 int padValue2 = 20;
-
 
                 Console.WriteLine("Name".PadRight(30) + "Price".PadRight(padValue1) +
                                   "Brand".PadRight(padValue2) + "Motorized".PadRight(padValue2) +
                                   "Type".PadRight(padValue1));
-                Console.WriteLine("----------------------------------------------------------------------------------------------");
+                Console.WriteLine("==============================================================================================");
 
                 Console.WriteLine(selectedBoard.Name.PadRight(30) + selectedBoard.Price.ToString().PadRight(padValue1) +
                                   selectedBoard.Brand.ToString().PadRight(padValue2) + selectedBoard.Motorized.ToString().PadRight(padValue2) +
                                   selectedBoard.Type.ToString().PadRight(padValue1));
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nDescription");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("==============================================================================");
+                Console.WriteLine("==============================================================================================");
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("\n" + selectedBoard.Description);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("==============================================================================");
+                Console.WriteLine("==============================================================================================");
                 Console.ResetColor();
+
             }
-            Console.WriteLine("Is this board suitable?\n1. Yes\n2. No");
+
+            Console.WriteLine("\nIs this board suitable?\n1. Yes\n2. No");
             int answer = Helpers.TryNumber(2, 1);
+
             if (answer == 1)
             {
                 Console.Clear();
                 BookingMenu(boardId, c);
             }
+
             else if (answer == 2)
             {
                 Console.Clear();
@@ -89,13 +106,13 @@ namespace BoardRental.Methods
                 bool booking = true;
                 while (booking == true)
                 {
-                    Console.WriteLine("\n---------------------------------------------------------------------------");
+                    Console.WriteLine("\n===========================================================================");
                     Console.WriteLine("\n[1]. Select day | [2]. Previous week | [3]. Next week | [4]. Return to main");
                     int input = Helpers.TryNumber(4, 1);
                     switch (input)
                     {
                         case 1:
-                            
+
                             Console.WriteLine("Which day would you like to book? 1-5");
                             int day = Helpers.TryNumber(5, 1);
                             Helpers.ConfirmBooking(week, day, boardId, c);
@@ -141,7 +158,7 @@ namespace BoardRental.Methods
                 };
 
                 Console.WriteLine("Week " + week + ":");
-                Console.WriteLine("---------------------------------");
+                Console.WriteLine("=================================");
                 foreach (var day in daysInWeek)
                 {
 
@@ -187,7 +204,7 @@ namespace BoardRental.Methods
                         Console.Write("   \t\t" + "Available");
                         Console.ResetColor();
                     }
-                        dayCounter++;
+                    dayCounter++;
                 }
             }
         }
@@ -215,12 +232,14 @@ namespace BoardRental.Methods
                                    join boards in db.Longboards on booking.LongboardId equals boards.Id
                                    select new { booking.Id, boards.Name, booking.BookedWeek, booking.BookedDay, boards.Price };
 
-                Console.WriteLine("Id\tName\t\t\tWeek\tDay\tPrice");
+                Console.WriteLine("Id\tName    \t\t\tWeek\tDay\tPrice");
                 foreach (var booking in bookingList2)
                 {
-                    Console.WriteLine($"{booking.Id}\t{booking.Name}\t\t\t{booking.BookedWeek}\t{booking.BookedDay}\t{booking.Price}");
+                    Console.WriteLine($"{booking.Id}\t{booking.Name}    \t\t\t{booking.BookedWeek}\t{booking.BookedDay}\t{booking.Price}");
                 }
             }
+            Helpers.PressAnyKey();
+            Menus.Show("Main", c);
         }
     }
 }
