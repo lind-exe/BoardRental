@@ -15,7 +15,7 @@ namespace BoardRental.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=BoardRental;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=tcp:hanna.database.windows.net,1433;Initial Catalog=JonathanBoardRental;Persist Security Info=False;User ID=hannaadmin;Password=Lösenord1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
     }
     
