@@ -18,7 +18,7 @@ namespace BoardRental.Methods
 
                 int i = 0;
 
-                Console.WriteLine("Id\t\tName\t\t\tPrice\t\t\tMotorized\t\tBrand");
+                Console.WriteLine("Id\tName\t\t\tPrice\t\t\tMotorized\t\tBrand");
                 foreach (var b in boardList)
                 {
                     i++;
@@ -34,6 +34,7 @@ namespace BoardRental.Methods
 
         private static void OneBoard(int boardId, Customer c)
         {
+            Console.Clear();
             using (var db = new BoardRentalContext())
             {
 
@@ -53,10 +54,27 @@ namespace BoardRental.Methods
                 Console.WriteLine(selectedBoard.Name.PadRight(30) + selectedBoard.Price.ToString().PadRight(padValue1) +
                                   selectedBoard.Brand.ToString().PadRight(padValue2) + selectedBoard.Motorized.ToString().PadRight(padValue2) +
                                   selectedBoard.Type.ToString().PadRight(padValue1));
+                Console.WriteLine("\nDescription");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("==============================================================================");
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("\n" + selectedBoard.Description);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("==============================================================================");
+                Console.ResetColor();
             }
-            Console.Clear();
-            BookingMenu(boardId, c);
+            Console.WriteLine("Is this board suitable?\n1. Yes\n2. No");
+            int answer = Helpers.TryNumber(2, 1);
+            if (answer == 1)
+            {
+                Console.Clear();
+                BookingMenu(boardId, c);
+            }
+            else if (answer == 2)
+            {
+                Console.Clear();
+                Menus.Show("Main", c);
+            }
         }
 
         private static void BookingMenu(int boardId, Customer c)
@@ -184,6 +202,25 @@ namespace BoardRental.Methods
                 Console.WriteLine(displayUserName);
             }
             catch (Exception) { Console.WriteLine("Fel"); }
+        }
+
+        internal static void Bookings(Customer c)
+        {
+            using (var db = new BoardRentalContext())
+            {
+                var bookingList = db.BookedBoards.Where(x => x.CustomerId == c.Id).ToList();
+
+                var bookingList2 = from booking in bookingList
+                                   where booking.CustomerId == c.Id
+                                   join boards in db.Longboards on booking.LongboardId equals boards.Id
+                                   select new { booking.Id, boards.Name, booking.BookedWeek, booking.BookedDay, boards.Price };
+
+                Console.WriteLine("Id\tName\t\t\tWeek\tDay\tPrice");
+                foreach (var booking in bookingList2)
+                {
+                    Console.WriteLine($"{booking.Id}\t{booking.Name}\t\t\t{booking.BookedWeek}\t{booking.BookedDay}\t{booking.Price}");
+                }
+            }
         }
     }
 }

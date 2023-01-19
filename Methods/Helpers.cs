@@ -34,10 +34,10 @@ namespace BoardRental.Methods
                 {
                     ReturnToLogIn("Wrong password, try again!", c);
                 }
-                //else
-                //{
-                //    ReturnToLogIn("idk bro", c);
-                //}
+                else
+                {
+                    ReturnToLogIn("Try again", c);
+                }
                 return c;
             }
         }
@@ -65,7 +65,7 @@ namespace BoardRental.Methods
             Console.WriteLine("Input city: ");
             string city = CheckStringInput();
             Console.WriteLine("Input phone number: ");
-            string phone = CheckStringInput();
+            int phone = Helpers.TryNumber(999999999, 99999999);
             Console.WriteLine("Input email address: ");
             string email = CheckStringInput();
 
@@ -86,7 +86,7 @@ namespace BoardRental.Methods
                         FirstName = firstName,
                         LastName = lastName,
                         City = city,
-                        Phone = phone,
+                        Phone = phone.ToString(),
                         Email = email
                     };
                     database.Add(newCustomer);
@@ -149,12 +149,6 @@ namespace BoardRental.Methods
             Console.ResetColor();
             Console.Clear();
         }
-
-        internal static void BoardType(int type)
-        {
-
-        }
-
         internal static void ConfirmBooking(int week, int day, int boardId, Customer c)
         {
 
@@ -199,6 +193,7 @@ namespace BoardRental.Methods
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write(week);
                     Console.ResetColor();
+                    Console.WriteLine("\nYour booking price is: " + selectedBoard.Price);
                     Console.WriteLine("\nAre you sure you wish to proceed?\n1. Yes\n2. No");
                     int input = Helpers.TryNumber(2,1);
 
@@ -213,7 +208,10 @@ namespace BoardRental.Methods
                         };
                         db.Add(newBooking);
                         db.SaveChanges();
-                        Console.WriteLine("We will send a text to " + c.Phone + " as well as an email to " + c.Email + " with additional instructions when to pick up your board as well as how to use it & how to return it!");
+                        Console.WriteLine("\n\nWe will send a text to " + c.Phone + " as well as an email to " + c.Email + "" +
+                            "\nWith additional instructions when to pick up your board as well as how to use it & how to return it!");
+                        
+                        Helpers.PressAnyKey();
                         Console.Clear();
                         Victory(c);
                     }
@@ -241,11 +239,12 @@ namespace BoardRental.Methods
             }
         }
 
-        private static void PressAnyKey()
+        public static void PressAnyKey()
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nPress any key to continue.");
             Console.ReadKey(true);
+            Console.ResetColor();
         }
 
         private static void Victory(Customer c)
@@ -290,7 +289,6 @@ namespace BoardRental.Methods
                 Thread.Sleep(100); 
 
             }
-            Console.ReadKey();
             Console.Clear();
             Menus.Show("Main", c);
         }

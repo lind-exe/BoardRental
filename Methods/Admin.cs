@@ -3,6 +3,7 @@ using BoardRental.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Formats.Asn1;
 using System.Linq;
 using System.Security.Cryptography;
@@ -211,16 +212,39 @@ namespace BoardRental.Methods
         internal static void Queries()
         {
             int input = Helpers.TryNumber(3, 1);
-
+            Console.WriteLine("1. Most popular board\n2. Total number of bookings\n3.Total revenue");
             switch (input)
             {
                 case 1:
+                    Console.Clear();
                     MostPopularBoard();
+                    Helpers.PressAnyKey();
+                    Console.Clear();
                     break;
                 case 2:
+                    Console.Clear();
+                    TotalNumberOfBookings();
+                    Helpers.PressAnyKey();
+                    Console.Clear();
                     break;
                 case 3:
+                    Console.Clear();
+                    TotalRevenue();
+                    Helpers.PressAnyKey();
+                    Console.Clear();
                     break;
+            }
+        }
+
+        private static void TotalRevenue()
+        {
+            using (var db = new BoardRentalContext())
+            {
+                var totalRevenue = (from bb in db.BookedBoards
+                                   join l in db.Longboards on bb.LongboardId equals l.Id
+                                   select l.Price).Sum();
+
+                Console.WriteLine("Our total revenue is " + totalRevenue);
             }
         }
 
@@ -228,10 +252,25 @@ namespace BoardRental.Methods
         {
             using (var db = new BoardRentalContext())
             {
-                var mostPopularBoard = db.Longboards;
-                                       
+                var topBoard = (from b in db.BookedBoards
+                                join r in db.Longboards on b.LongboardId equals r.Id
+                                select new { RoomName = r.Name, }).ToList().GroupBy(p => p.RoomName);
+                Console.WriteLine();
+                foreach (var board in topBoard.OrderByDescending(p => p.Count()).Take(1))
+                {
+                    Console.WriteLine($"Most booked board is {board.Key} with {board.Count()} bookings\n");
+                }
+            }
+        }
+        private static void TotalNumberOfBookings()
+        {
 
+            using (var db = new BoardRentalContext())
+            {
+                var bookingCount = db.BookedBoards.Count();
 
+                Console.WriteLine("We have " + bookingCount + " bookings registered on our database!");
+                Console.WriteLine();
             }
         }
     }
