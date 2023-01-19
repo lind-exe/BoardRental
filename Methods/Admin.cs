@@ -80,11 +80,12 @@ namespace BoardRental.Methods
             using (var db = new BoardRentalContext())
             {
                 var boardList = db.Longboards.ToList();
-
+                int i = 0;
                 Console.WriteLine("ID\t\tName\t\tPrice\t\tMotorized\t\tBrand");
                 foreach (var board in db.Longboards.ToList())
                 {
-                    Console.WriteLine(board.Id + "\t\t" + board.Name + "\t\t" + board.Price + "\t\t" + board.Motorized + "\t\t\t" + board.Brand + "\t\t");
+                    i++;
+                    Console.WriteLine(i + "\t\t" + board.Name + "\t\t" + board.Price + "\t\t" + board.Motorized + "\t\t\t" + board.Brand + "\t\t");
                 }
                 Console.WriteLine("Select id of the board you wish to edit: ");
                 int idInput = Helpers.TryNumber(boardList.ToList().Count, 1);
@@ -127,7 +128,7 @@ namespace BoardRental.Methods
             using (var db = new BoardRentalContext())
             {
                 var board = db.Longboards.Where(x => x.Id == selectedBoard).FirstOrDefault();
-                Console.Write("\nAre you sure you wish to delete " + board.Name + "\n1. Yes\n2. No");
+                Console.WriteLine("\nAre you sure you wish to delete " + board.Name + "\n1. Yes\n2. No");
                 int update = Helpers.TryNumber(2, 1);
                 if (update == 1)
                 {
