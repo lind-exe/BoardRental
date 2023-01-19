@@ -105,7 +105,7 @@ namespace BoardRental.Methods
                     LogIn login = (LogIn)99; //Default
                     if (!int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr) || nr > Enum.GetNames(typeof(LogIn)).Length)
                     {
-                        Console.WriteLine("Wrong input try again!");
+                        Helpers.WrongInput();
                     }
                     else
                     {

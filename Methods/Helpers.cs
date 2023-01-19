@@ -129,7 +129,7 @@ namespace BoardRental.Methods
                 if (!int.TryParse(Console.ReadLine(), out number) || number > maxValue || number < minValue)
                 {
                     Console.Write("Wrong input, try again: ");
-                    
+
                 }
                 else
                 {
@@ -152,7 +152,147 @@ namespace BoardRental.Methods
 
         internal static void BoardType(int type)
         {
-            
+
+        }
+
+        internal static void ConfirmBooking(int week, int day, int boardId, Customer c)
+        {
+
+            using (var db = new BoardRentalContext())
+            {
+                string selectedDay = "";
+                switch (day)
+                {
+                    case 1:
+                        selectedDay = "Monday";
+                        break;
+                    case 2:
+                        selectedDay = "Tuesday";
+                        break;
+                    case 3:
+                        selectedDay = "Wednesday";
+                        break;
+                    case 4:
+                        selectedDay = "Thursday";
+                        break;
+                    case 5:
+                        selectedDay = "Friday";
+                        break;
+                }
+
+
+                var selectedBoard = db.Longboards.Where(x => x.Id == boardId).FirstOrDefault();
+                var customer = db.Customers.Where(x => x.Id == c.Id);
+                var booking = db.BookedBoards.Where(x => x.Longboard.Id == boardId && x.BookedWeek == week && x.BookedDay == day).FirstOrDefault();
+                Console.Clear();
+                if (booking == null)
+                {
+                    Console.Write("You have selected ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(selectedBoard.Name);
+                    Console.ResetColor();
+                    Console.Write(" for booking on ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(selectedDay);
+                    Console.ResetColor();
+                    Console.Write(" week ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(week);
+                    Console.ResetColor();
+                    Console.WriteLine("\nAre you sure you wish to proceed?\n1. Yes\n2. No");
+                    int input = Helpers.TryNumber(2,1);
+
+                    if (input == 1)
+                    {
+                        var newBooking = new BookedBoard()
+                        {
+                            BookedDay = day,
+                            BookedWeek = week,
+                            LongboardId = selectedBoard.Id,
+                            CustomerId = c.Id
+                        };
+                        db.Add(newBooking);
+                        db.SaveChanges();
+                        Console.WriteLine("We will send a text to " + c.Phone + " as well as an email to " + c.Email + " with additional instructions when to pick up your board as well as how to use it & how to return it!");
+                        Console.Clear();
+                        Victory(c);
+                    }
+                    else if (input == 2)
+                    {
+                        Console.Write("Returning to main menu");
+                        Thread.Sleep(500);
+                        Console.Write(".");
+                        Thread.Sleep(500);
+                        Console.Write(".");
+                        Thread.Sleep(500);
+                        Console.Write(".");
+                        Thread.Sleep(500);
+                        Console.Write(".");                     
+                        Thread.Sleep(500);
+                        Console.Clear();
+                        Menus.Show("Main", c);
+                        
+                    }
+                }
+                else if (booking != null)
+                {
+                    Console.WriteLine("Already booked, try another day");
+                }
+            }
+        }
+
+        private static void PressAnyKey()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nPress any key to continue.");
+            Console.ReadKey(true);
+        }
+
+        private static void Victory(Customer c)
+        {
+            string text = "------------------------------------------------------------\n|\t\t    BOOKING CONFIRMED!                     |\n|\t\tThank you and ride safe :)                 |\n------------------------------------------------------------";
+
+            for (int i = 0; i < 5; i++)
+            {
+
+
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(text);
+                Thread.Sleep(100);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(text);
+                Thread.Sleep(100); 
+
+            }
+            Console.ReadKey();
+            Console.Clear();
+            Menus.Show("Main", c);
         }
     }
 }

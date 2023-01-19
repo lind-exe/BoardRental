@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BoardRental.Methods
-{
+{                                                                               //(!bookCheck.BookedDay.HasValue) ????
     internal class View
     {
         internal static void BrowseBoards(Customer c)
@@ -25,9 +25,8 @@ namespace BoardRental.Methods
                     Console.WriteLine(i + "\t" + b.Name + "\t\t\t" + b.Price + "\t\t\t" + b.Motorized + "\t\t\t" + b.Brand + "\t\t");
                 }
 
-                Console.Write("Enter id of the board you wish to rent or 0 to return: ");
-                int answer = Helpers.TryNumber(boardList.Count(), 0);
-                int selectedProduct = answer;
+                Console.Write("\nEnter id of the board you wish to rent: ");
+                int answer = Helpers.TryNumber(boardList.Count(), 1);
                 answer = boardList[answer - 1].Id;
                 OneBoard(answer, c);
             }
@@ -56,6 +55,7 @@ namespace BoardRental.Methods
                                   selectedBoard.Type.ToString().PadRight(padValue1));
                 Console.WriteLine("\n" + selectedBoard.Description);
             }
+            Console.Clear();
             BookingMenu(boardId, c);
         }
 
@@ -63,58 +63,114 @@ namespace BoardRental.Methods
         {
             using (var db = new BoardRentalContext())
             {
-                var selectedBoard = db.Longboards.Where(x => x.Id == boardId).FirstOrDefault();
 
-                var bookCheck = db.BookedBoards.Where(x => x.Longboard.Id == boardId).FirstOrDefault();
+                int week = 1;
+                View.OneWeek(week, boardId, c);
+
+
+                bool booking = true;
+                while (booking == true)
+                {
+                    Console.WriteLine("\n---------------------------------------------------------------------------");
+                    Console.WriteLine("\n[1]. Select day | [2]. Previous week | [3]. Next week | [4]. Return to main");
+                    int input = Helpers.TryNumber(4, 1);
+                    switch (input)
+                    {
+                        case 1:
+                            
+                            Console.WriteLine("Which day would you like to book? 1-5");
+                            int day = Helpers.TryNumber(5, 1);
+                            Helpers.ConfirmBooking(week, day, boardId, c);
+                            booking = false;
+                            break;
+                        case 2:
+                            week--;
+                            Console.Clear();
+                            View.OneWeek(week, boardId, c);
+                            break;
+                        case 3:
+                            week++;
+                            Console.Clear();
+                            View.OneWeek(week, boardId, c);
+                            break;
+                        case 4:
+                            Console.Clear();
+                            Menus.Show("Main", c);
+                            booking = false;
+                            break;
+                    }
+                }
+
+
+            }
+        }
+
+        private static void OneWeek(int week, int boardId, Customer c)
+        {
+            using (var db = new BoardRentalContext())
+            {
+                var bookList = db.BookedBoards.Where(x => x.Longboard.Id == boardId);
+
+                var bookCheck = bookList.ToList();
 
                 List<string> daysInWeek;
-                int dayCounter = 0;
+                int dayCounter = 1;
                 string availability = "";
-
+                int i = 1;
                 daysInWeek = new List<string>()
                 {
                     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
                 };
 
-                //(!bookCheck.BookedDay.HasValue) ????
-
+                Console.WriteLine("Week " + week + ":");
+                Console.WriteLine("---------------------------------");
                 foreach (var day in daysInWeek)
                 {
-                    dayCounter++;
-                    if (bookCheck == null)
-                    {
-                        availability = "Available";
 
-                    }
-                    else if (bookCheck != null)
+                    Console.Write($"\n{dayCounter}. {day}");
+
+                    foreach (var booked in db.BookedBoards.Where(b => b.Longboard.Id == boardId))
                     {
-                        if (bookCheck.BookedDay == dayCounter)
-                        {
-                            availability = "Booked";
-                        }
-                        else if (bookCheck.BookedDay != dayCounter)
+                        if (booked == null)
                         {
                             availability = "Available";
                         }
-                        
+                        else if (booked != null)
+                        {
+                            if (booked.BookedDay == dayCounter && booked.BookedWeek == week)
+                            {
+                                availability = "Booked";
+                                break;
+                            }
+                            else
+                            {
+                                availability = "Available";
+                            }
+                        }
                     }
-                    Console.Write(dayCounter + ". " + day + " ");
+
                     if (availability == "Available")
-                    {  
+                    {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(availability + "\n");
+                        Console.Write("   \t\t" + availability);
                         Console.ResetColor();
                     }
-                    else
+
+                    else if (availability == "Booked")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(availability + "\n");
+                        Console.Write("   \t\t" + availability);
                         Console.ResetColor();
                     }
-                    
 
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("   \t\t" + "Available");
+                        Console.ResetColor();
+                    }
+                        dayCounter++;
                 }
-                Console.ReadLine();
             }
         }
 

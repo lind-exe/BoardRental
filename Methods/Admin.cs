@@ -1,4 +1,5 @@
-﻿using BoardRental.Models;
+﻿using BoardRental.Migrations;
+using BoardRental.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -209,7 +210,29 @@ namespace BoardRental.Methods
         }
         internal static void Queries()
         {
-            throw new NotImplementedException();
+            int input = Helpers.TryNumber(3, 1);
+
+            switch (input)
+            {
+                case 1:
+                    MostPopularBoard();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+        }
+
+        private static void MostPopularBoard()
+        {
+            using (var db = new BoardRentalContext())
+            {
+                var mostPopularBoard = db.Longboards;
+                                       
+
+
+            }
         }
     }
 }

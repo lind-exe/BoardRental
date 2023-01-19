@@ -9,6 +9,8 @@ namespace BoardRental.Models
     public class BookedBoard
     {
         public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public int LongboardId { get; set; }
         public int? BookedDay { get; set; }
         public int? BookedWeek { get; set; }
 
