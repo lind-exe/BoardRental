@@ -69,7 +69,7 @@ namespace BoardRental.Methods
             Console.WriteLine("Input email address: ");
             string email = CheckStringInput();
 
-            using (var database = new BoardRentalContext())            //detta lägger till varje sak
+            using (var database = new BoardRentalContext())          
             {
                 var customerList = database.Customers;
                 var userNameExists = customerList.SingleOrDefault(x => x.UserName == userName) != null;

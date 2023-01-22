@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BoardRental.Methods
-{                                                                               //(!bookCheck.BookedDay.HasValue) ????
+{
     internal class View
     {
         internal static void BrowseBoards(Customer c)
@@ -119,9 +119,17 @@ namespace BoardRental.Methods
                             booking = false;
                             break;
                         case 2:
-                            week--;
-                            Console.Clear();
-                            View.OneWeek(week, boardId, c);
+                            if (week == 1)          // making sure week can't go negative
+                            {
+                                Console.Clear();
+                                View.OneWeek(week, boardId, c);
+                            }
+                            else
+                            {
+                                week--;
+                                Console.Clear();
+                                View.OneWeek(week, boardId, c);
+                            }
                             break;
                         case 3:
                             week++;
